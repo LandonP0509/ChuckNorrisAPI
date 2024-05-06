@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Chuck Norris Project</title>
+</head>
+<body>
+  <h1>Chuck Norris Jokes API</h1>
+
+  <button id="getJokeBtn">Generate Joke</button>
+
+  <button id="newJokeBtn" style="display: none;">Refresh Joke</button>
+  
+  <div id="jokeContainer"></div>
+
+  <script>
+    document.getElementById("getJokeBtn").addEventListener("click", getJoke);
+
+    function getJoke() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://api.chucknorris.io/jokes/random", true);
+      xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          var response = JSON.parse(xhr.responseText);
+          displayJoke(response.value);
+        } else {
+          console.error("Failed to fetch Chuck Norris joke: ", xhr.statusText);
+        }
+      };
+      xhr.onerror = function () {
+        console.error("Failed to fetch Chuck Norris joke.");
+      };
+      xhr.send();
+    }
+
+    function displayJoke(joke) {
+      var jokeContainer = document.getElementById("jokeContainer");
+      jokeContainer.innerHTML = "<p>" + joke + "</p>";
+      document.getElementById("getJokeBtn").style.display = "none";
+
+      document.getElementById("newJokeBtn").style.display = "block";
+
+      document.getElementById("newJokeBtn").addEventListener("click", getNewJoke);
+    }
+
+    function getNewJoke() {
+      document.getElementById("jokeContainer").innerHTML = "";
+
+      document.getElementById("getJokeBtn").style.display = "block";
+
+      document.getElementById("newJokeBtn").style.display = "none";
+    }
+  </script>
+</body>
+</html>
